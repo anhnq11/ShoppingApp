@@ -47,7 +47,13 @@ const Products = ({ navigation }) => {
           {/* Right layout */}
           <View style={Style.rightLayout} >
             <View style={Style.imgAvatar} >
-              <Image style={{ width: '100%', height: '100%', resizeMode: 'cover' }} source={{ uri: user.image }} />
+              {
+                user.image ? (
+                  <Image style={{ width: '100%', height: '100%', resizeMode: 'cover' }} source={{ uri: user.image }} />
+                ) : (
+                  <Image style={{ width: '100%', height: '100%', resizeMode: 'cover' }} source={{ uri: 'https://th.bing.com/th/id/OIP.4NKHCiIt5eVTkmhWokCqJAHaHa?pid=ImgDet&w=640&h=640&rs=1' }} />
+                )
+              }
             </View>
           </View>
         </View>

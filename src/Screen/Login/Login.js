@@ -8,6 +8,7 @@ import Style from './LoginStyle'
 import URL from '../../UrlApi'
 import { useDispatch } from 'react-redux';
 import { login } from '../../Redux/Reducer/Reducer'
+import axios from 'axios';
 
 let windowWidth = Dimensions.get('window').width * 80 / 100;
 
@@ -15,45 +16,48 @@ const Login = ({ navigation }) => {
 
   const dispatch = useDispatch();
 
-  const [userName, setuserName] = useState('anhnq');
-  const [passWord, setpassWord] = useState('123');
-  const [errorText, seterrorText] = useState('');
+  const [phoneNum, setPhoneNum] = useState(null);
+  const [passWord, setPassWord] = useState(null);
+  const [errorText, setErrorText] = useState(null);
 
   // Kiểm tra tài khoản người dùng đăng nhập
-  const checkLogin = () => {
+  const checkLogin = async () => {
     let checkLogin = true;
 
-    if (userName === '' || passWord === '') {
-      seterrorText('*Vui lòng nhập Tên đăng nhập và Mật khẩu!')
+    if (phoneNum == null || passWord == null) {
+      setErrorText('*Vui lòng nhập đủ thông tin!')
       checkLogin = false;
     }
-    else{
-      seterrorText('');
+    else {
+      setErrorText('');
     }
 
     if (checkLogin) {
-      let mUrl = URL + 'users/login?username=' + userName + '&password=' + passWord;
-      fetch(mUrl)
-        .then(response => response.json())
-        .then(data => {
-          if(data.status !== 404){
-            dispatch(login(data));
-            saveUserData(data);
-            seterrorText('');
+      await axios({
+        method: 'get',
+        url: `${URL}users/login?phonenum=` + phoneNum + '&password=' + passWord,
+      })
+        .then((res) => {
+          if (res.status == 200) {
+            dispatch(login(res.data))
+            saveUserData(res.data)
+            setErrorText(null)
             Alert.alert('Thông báo', 'Đăng nhập thành công!');
-            navigation.navigate('MainScr');
+            navigation.navigate('MainScr', { screen: 'Home' });
+            return;
           }
-          else{
-            seterrorText('Tên đăng nhập hoặc Mật khẩu không chính xác!');
+          else if (res.status == 404) {
+            setErrorText('Số điện thoại hoặc mật khẩu không chính xác!')
+            return;
           }
         })
-        .catch(error => {
-          console.error(error);
-        });
+        .catch((err) => {
+          console.log(err);
+        })
     }
   }
 
-    // Lưu thông tin người dùng khi đăng nhập thành công
+  // Lưu thông tin người dùng khi đăng nhập thành công
   const saveUserData = async (userData) => {
     try {
       await AsyncStorage.setItem('userData', JSON.stringify(userData));
@@ -71,10 +75,23 @@ const Login = ({ navigation }) => {
       </View>
       <View style={Style.bottomLayout}>
         <Text style={Style.headerText}>Đăng nhập</Text>
-        <TextInput type="text" placeholder='Tên đăng nhập...' placeholderTextColor={'#EFE3C8'} style={Style.input} onChangeText={(text) => { setuserName(text) }} />
-        <TextInput type="text" placeholder='Mật khẩu...' secureTextEntry={true} placeholderTextColor={'#EFE3C8'} style={Style.input} onChangeText={(text) => { setpassWord(text) }} />
+        <TextInput
+          type="text"
+          placeholder='Số điện thoại...'
+          placeholderTextColor={'#EFE3C8'}
+          style={Style.input}
+          onChangeText={(text) => { setPhoneNum(text) }} />
+        <TextInput
+          type="text"
+          placeholder='Mật khẩu...'
+          secureTextEntry={true}
+          placeholderTextColor={'#EFE3C8'}
+          style={Style.input}
+          onChangeText={(text) => { setPassWord(text) }} />
         {
-          (errorText) ? <Text style={Style.errorText} > {errorText} </Text> : <View></View>
+          (errorText)
+            ? <Text style={Style.errorText} > {errorText} </Text>
+            : <View></View>
         }
         <TouchableOpacity style={Style.button} onPress={() => {
           // Check account

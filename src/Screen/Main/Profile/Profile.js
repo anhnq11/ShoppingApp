@@ -7,6 +7,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 const Profile = ({ navigation }) => {
 
   const user = useSelector(selectUser)
+  console.log(user);
+
   return (
     <View style={{
       width: '100%',
@@ -28,15 +30,31 @@ const Profile = ({ navigation }) => {
           height: 100,
           borderRadius: 20,
           overflow: 'hidden',
+          backgroundColor: 'white',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}>
-          <Image
-            source={{ uri: user.image }}
-            style={{
-              width: '100%',
-              height: '100%',
-              resizeMode: 'cover'
-            }}
-          />
+          {
+            user.image ? (
+              <Image
+                source={{ uri: user.image }}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  resizeMode: 'cover'
+                }}
+              />
+            ) : (
+              <Image
+                source={{ uri: 'https://th.bing.com/th/id/OIP.4NKHCiIt5eVTkmhWokCqJAHaHa?pid=ImgDet&w=640&h=640&rs=1' }}
+                style={{
+                  width: '70%',
+                  height: '70%',
+                  resizeMode: 'cover'
+                }}
+              />
+            )
+          }
         </View>
         <View style={{
           marginLeft: 10,

@@ -49,7 +49,7 @@ const Home = ({ navigation }) => {
       <View style={[Style.container, { width: windowWidth, height: windowHeight }]} >
         < ScrollView >
           {/* Top layout */}
-          <View style={ Style.topLayout } >
+          <View style={Style.topLayout} >
             {/* Left layout */}
             <View style={Style.leftLayout} >
               <View>
@@ -60,7 +60,13 @@ const Home = ({ navigation }) => {
             {/* Right layout */}
             <View style={Style.rightLayout} >
               <View style={Style.imgAvatar} >
-                <Image style={{ width: '100%', height: '100%', resizeMode: 'cover' }} source={{ uri: user.image }} />
+                {
+                  user.image ? (
+                    <Image style={{ width: '100%', height: '100%', resizeMode: 'cover' }} source={{ uri: user.image }} />
+                  ) : (
+                    <Image style={{ width: '100%', height: '100%', resizeMode: 'cover' }} source={{ uri: 'https://th.bing.com/th/id/OIP.4NKHCiIt5eVTkmhWokCqJAHaHa?pid=ImgDet&w=640&h=640&rs=1' }} />
+                  )
+                }
               </View>
             </View>
           </View>
