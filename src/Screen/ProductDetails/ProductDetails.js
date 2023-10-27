@@ -105,9 +105,6 @@ const ProductDetails = ({ route, navigation }) => {
         console.log('Add to cart successfully!!');
         navigation.navigate('Cart')
       }
-      else {
-        // setLikePrd(false)
-      }
     })
   }
 

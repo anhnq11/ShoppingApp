@@ -7,7 +7,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 const Profile = ({ navigation }) => {
 
   const user = useSelector(selectUser)
-  console.log(user);
 
   return (
     <View style={{

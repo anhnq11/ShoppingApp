@@ -22,39 +22,38 @@ const Login = ({ navigation }) => {
 
   // Kiểm tra tài khoản người dùng đăng nhập
   const checkLogin = async () => {
-    let checkLogin = true;
-
-    if (phoneNum == null || passWord == null) {
+    setErrorText(null)
+    
+    if (phoneNum == '' || passWord == '') {
       setErrorText('*Vui lòng nhập đủ thông tin!')
-      checkLogin = false;
-    }
-    else {
-      setErrorText('');
+      return;
     }
 
-    if (checkLogin) {
-      await axios({
-        method: 'get',
-        url: `${URL}users/login?phonenum=` + phoneNum + '&password=' + passWord,
+    await axios({
+      method: 'post',
+      url: `${URL}users/login`,
+      data: {
+        phonenum: phoneNum,
+        password: passWord
+      }
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          dispatch(login(res.data))
+          saveUserData(res.data)
+          setErrorText(null)
+          Alert.alert('Thông báo', 'Đăng nhập thành công!');
+          navigation.navigate('MainScr', { screen: 'Home' });
+          return;
+        }
+        else {
+          setErrorText('Số điện thoại hoặc mật khẩu không chính xác!')
+          return;
+        }
       })
-        .then((res) => {
-          if (res.status == 200) {
-            dispatch(login(res.data))
-            saveUserData(res.data)
-            setErrorText(null)
-            Alert.alert('Thông báo', 'Đăng nhập thành công!');
-            navigation.navigate('MainScr', { screen: 'Home' });
-            return;
-          }
-          else if (res.status == 404) {
-            setErrorText('Số điện thoại hoặc mật khẩu không chính xác!')
-            return;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-    }
+      .catch((err) => {
+        console.log(err);
+      })
   }
 
   // Lưu thông tin người dùng khi đăng nhập thành công

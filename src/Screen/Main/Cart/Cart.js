@@ -30,9 +30,6 @@ const Cart = ({ navigation }) => {
       .then((res) => {
         if (res.status === 200) {
           setProductList(res.data);
-          productList.forEach(element => {
-            console.log(element);
-          });
           dispatch(updateCartQuantity(res.data.length));
           getTotalPrice(res.data);
         }
@@ -110,7 +107,6 @@ const Cart = ({ navigation }) => {
       getProducts();
     });
     getProducts();
-    console.log(isLoading);
     return tabPress;
   }, [ isLoading ]);
 
