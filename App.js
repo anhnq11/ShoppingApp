@@ -14,6 +14,7 @@ import AccountDetails from './src/Screen/Main/Profile/AccountDetails';
 import Address from './src/Screen/Main/Profile/Address/Address';
 import AddAddress from './src/Screen/Main/Profile/Address/AddAddress';
 import AddressList from './src/Screen/Main/Profile/Address/AddressList';
+import Payment from './src/Screen/Main/Cart/Payment';
 
 const Stack = createStackNavigator();
 
@@ -27,6 +28,7 @@ export default function App() {
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="Regis" component={Regis} options={{ headerShown: false }} />
           <Stack.Screen name="MainScr" component={MainScr} options={{ headerShown: false }} />
+          <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }} />
           <Stack.Screen name="Details" component={ProductDetail} options={{ headerShown: false }} />
           <Stack.Screen name="AccountDetails" component={AccountDetails} options={{ headerShown: false }} />
           <Stack.Screen name="Address" component={Address} options={{ headerShown: false }} />

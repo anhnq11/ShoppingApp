@@ -103,7 +103,6 @@ const ProductDetails = ({ route, navigation }) => {
     }).then((res) => {
       if (res.data) {
         console.log('Add to cart successfully!!');
-        navigation.navigate('Cart')
       }
     })
   }

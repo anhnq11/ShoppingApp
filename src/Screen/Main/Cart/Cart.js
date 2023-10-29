@@ -14,12 +14,9 @@ const Cart = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const user = useSelector(selectUser);
-  const cart = useSelector(selectCartQuantity);
   const [productList, setProductList] = useState([]);
   const [isLoading, setIsLoading] = useState(false)
   const [totalPrice, setTotalPrice] = useState(0)
-
-  const shippingPrice = 30000
 
   const getProducts = async () => {
     setIsLoading(true)
@@ -66,7 +63,7 @@ const Cart = ({ navigation }) => {
     })
   }
 
-  const handleAdd = ({item}) => {
+  const handleAdd = ({ item }) => {
     setIsLoading(true)
     axios({
       method: 'post',
@@ -86,7 +83,7 @@ const Cart = ({ navigation }) => {
     })
   }
 
-  const handleRemove = ({item}) => {
+  const handleRemove = ({ item }) => {
     setIsLoading(true);
     axios({
       method: 'put',
@@ -108,7 +105,7 @@ const Cart = ({ navigation }) => {
     });
     getProducts();
     return tabPress;
-  }, [ isLoading ]);
+  }, [isLoading]);
 
   return (
     <View>
@@ -134,7 +131,7 @@ const Cart = ({ navigation }) => {
         </Text>) : (
           <View style={{ width: '100%', height: '95%' }}>
             <View style={{
-              height: '70%',
+              height: '85%',
             }}>
               <SwipeListView
                 data={productList}
@@ -145,7 +142,7 @@ const Cart = ({ navigation }) => {
                 rightOpenValue={-170}
                 stopLeftSwipe={94}
                 stopRightSwipe={-200}
-                renderHiddenItem={({item}) => (
+                renderHiddenItem={({ item }) => (
                   <View style={{
                     width: '100%',
                     height: '90%',
@@ -180,7 +177,7 @@ const Cart = ({ navigation }) => {
                         borderRadius: 10,
                         justifyContent: 'center'
                       }}
-                        onPress={() => handleRemove({item})}
+                        onPress={() => handleRemove({ item })}
                       >
                         <Icon name='minus' type='antdesign' size={30} color={'#362C36'} />
                       </TouchableOpacity>
@@ -201,7 +198,7 @@ const Cart = ({ navigation }) => {
                         borderRadius: 10,
                         justifyContent: 'center'
                       }}
-                        onPress={() => handleAdd({item})}
+                        onPress={() => handleAdd({ item })}
                       >
                         <Icon name='plus' type='antdesign' size={30} color={'#362C36'} />
                       </TouchableOpacity>
@@ -280,95 +277,59 @@ const Cart = ({ navigation }) => {
             </View>
             <View style={{
               width: '100%',
-              padding: 10,
+              padding: 5,
+              paddingHorizontal: 20,
               backgroundColor: '#38232A',
               borderTopLeftRadius: 20,
               borderTopRightRadius: 20,
               position: 'absolute',
-              bottom: 5,
+              bottom: 10,
             }}>
-              <View style={{
-                width: '100%',
-                justifyContent: 'space-between',
-                flexDirection: 'row',
-              }}>
-                <Text style={{
-                  color: '#EFE3C8',
-                  fontSize: 20
-                }}>
-                  Tổng tiền:
-                </Text>
-                <Text style={{
-                  color: '#EFE3C8',
-                  fontSize: 20,
-                  fontWeight: 'bold'
-                }}>
-                  {totalPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} VNĐ
-                </Text>
-              </View>
-              <View style={{
-                width: '100%',
-                justifyContent: 'space-between',
-                flexDirection: 'row',
-              }}>
-                <Text style={{
-                  color: '#EFE3C8',
-                  fontSize: 20
-                }}>
-                  Phí vận chuyển:
-                </Text>
-                <Text style={{
-                  color: '#EFE3C8',
-                  fontSize: 20,
-                  fontWeight: 'bold'
-                }}>
-                  {shippingPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} VNĐ
-                </Text>
-              </View>
-              <Text style={{
-                width: '100%',
-                height: 26,
-                color: '#EFE3C8',
-                fontSize: 20
-              }}>
-                --------------------------------------------------------------------------------
-              </Text>
-              <View style={{
-                width: '100%',
-                justifyContent: 'space-between',
-                flexDirection: 'row',
-              }}>
-                <Text style={{
-                  color: '#EFE3C8',
-                  fontSize: 20
-                }}>
-                  Tổng thanh toán:
-                </Text>
-                <Text style={{
-                  color: '#EFE3C8',
-                  fontSize: 20,
-                  fontWeight: 'bold'
-                }}>
 
-                  {(totalPrice + shippingPrice).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} VNĐ
-                </Text>
-              </View>
-              <TouchableOpacity style={{
+              <View style={{
                 width: '100%',
-                backgroundColor: '#EFE3C8',
-                borderRadius: 10,
-                marginTop: 5
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                alignItems: 'center',
               }}>
-                <Text style={{
-                  color: '#362C36',
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  paddingVertical: 5
-                }}>
-                  Tiến hành thanh toán
-                </Text>
-              </TouchableOpacity>
+                <View>
+                  <Text style={{
+                    color: '#EFE3C8',
+                    fontSize: 15
+                  }}>
+                    Tổng thanh toán:
+                  </Text>
+                  <Text style={{
+                    color: '#EFE3C8',
+                    fontSize: 20,
+                    fontWeight: 'bold'
+                  }}>
+
+                    {totalPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} VNĐ
+                  </Text>
+                </View>
+                <TouchableOpacity style={{
+                  backgroundColor: '#EFE3C8',
+                  borderRadius: 10,
+                  marginTop: 5
+                }}
+                  onPress={() => navigation.navigate('Payment', {
+                    productList: productList,
+                    price: totalPrice,
+                  })}
+                >
+                  <Text style={{
+                    color: '#362C36',
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    paddingHorizontal: 10,
+                    paddingVertical: 15
+                  }}>
+                    Thanh toán ({productList.length})
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         )}

@@ -22,6 +22,8 @@ const Regis = ({ navigation }) => {
   const handleRegis = async () => {
     setError(null)
 
+    console.log(userName, ' - ', phoneNum, ' - ', password);
+
     if (userName == null || phoneNum == null || password == null || rePassword == null) {
       setError('* Vui lòng nhập đủ thông tin!')
       return;
@@ -30,7 +32,7 @@ const Regis = ({ navigation }) => {
       setError('* Số điện thoại không đúng định dạng!')
       return;
     }
-    else if (password.length < 8){
+    else if (password.length < 8) {
       setError('* Mật khẩu phải lớn hơn 8 ký tự!')
       return;
     }
@@ -49,34 +51,32 @@ const Regis = ({ navigation }) => {
           setError('* Số điện thoại đã được sử dụng!')
           return;
         }
+        else {
+          axios({
+            method: 'post',
+            url: `${URL}users/regis`,
+            data: {
+              fullname: userName,
+              phonenum: phoneNum,
+              password: password
+            }
+          }).then((res) => {
+            if (res.status == 200) {
+              dispatch(login(res.data))
+              saveUserData(res.data)
+              setError(null)
+              Alert.alert('Thông báo', ' Đăng ký tài khoản thành công!');
+              navigation.navigate('MainScr')
+            }
+          }).catch(error => {
+            console.error(error);
+            // Alert.alert('Thông báo', ' Đăng ký tài khoản thất bại!');
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
       })
-
-      if(!error){
-        axios({
-          method: 'post',
-          url: `${URL}users/regis`,
-          data: {
-            fullname: userName,
-            phonenum: phoneNum,
-            password: password
-          }
-        }).then((res) => {
-          if (res.status == 200) {
-            dispatch(login(res.data))
-            saveUserData(res.data)
-            setError(null)
-            Alert.alert('Thông báo', ' Đăng ký tài khoản thành công!');
-            navigation.navigate('MainScr')
-          }
-        }).catch(error => {
-          console.error(error);
-          Alert.alert('Thông báo', ' Đăng ký tài khoản thất bại!');
-        });
-      }
-
   }
 
   return (
