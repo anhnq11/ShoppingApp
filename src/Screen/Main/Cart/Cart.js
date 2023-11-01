@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -304,7 +304,6 @@ const Cart = ({ navigation }) => {
                     fontSize: 20,
                     fontWeight: 'bold'
                   }}>
-
                     {totalPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} VNĐ
                   </Text>
                 </View>

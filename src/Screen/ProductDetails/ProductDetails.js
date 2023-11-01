@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react-native'
+import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, FlatList, ToastAndroid } from 'react-native'
 import React from 'react'
 import { useState } from 'react';
 import { Icon, withBadge } from '@rneui/themed';
@@ -102,7 +102,7 @@ const ProductDetails = ({ route, navigation }) => {
       }
     }).then((res) => {
       if (res.data) {
-        console.log('Add to cart successfully!!');
+        ToastAndroid.show('Đã thêm sản phẩm vào giỏ hàng!', ToastAndroid.SHORT);
       }
     })
   }
