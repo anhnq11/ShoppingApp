@@ -3,6 +3,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { selectUser } from '../../../Redux/Reducer/Reducer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { onPress } from 'deprecated-react-native-prop-types/DeprecatedTextPropTypes'
 
 const Profile = ({ navigation }) => {
 
@@ -101,7 +102,7 @@ const Profile = ({ navigation }) => {
           <TouchableOpacity style={styles.itemBox} onPress={() => navigation.navigate('Address')}>
             <Text style={styles.itemText}>Địa chỉ giao hàng</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.itemBox}>
+          <TouchableOpacity style={styles.itemBox} onPress={() => navigation.navigate('OrderTracking')}>
             <Text style={styles.itemText}>Theo dõi đơn hàng</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.itemBox}>
