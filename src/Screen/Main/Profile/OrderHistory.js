@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react'
 import URL from '../../../UrlApi'
 import axios from 'axios'
 
-const OrderTracking = ({ navigation }) => {
+const OrderHistory = ({ navigation }) => {
 
     const user = useSelector(selectUser)
     const [data, setData] = useState([])
@@ -15,7 +15,7 @@ const OrderTracking = ({ navigation }) => {
     const getData = () => {
         axios({
             method: 'get',
-            url: `${URL}products/invoices?user_id=` + user._id + `&isDone=false`,
+            url: `${URL}products/invoices?user_id=` + user._id + `&isDone=true`,
         }).then((res) => {
             if (res.status === 200) {
                 setData(res.data)
@@ -23,30 +23,6 @@ const OrderTracking = ({ navigation }) => {
         }).catch((err) => {
             console.log(err);
         });
-    }
-
-    const updateInvoice = ({ item }) => {
-        let price = (item.totalAmount).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
-        Alert.alert('Xác nhận', 'Bạn đã nhận được hàng và thanh toán ' + price + ' VNĐ cho người bán!', [
-            {
-                text: 'Cancel',
-                style: 'cancel',
-            },
-            {
-                text: 'OK', onPress: () => {
-                    axios({
-                        method: 'put',
-                        url: `${URL}products/invoices?_id=` + item._id,
-                    }).then((res) => {
-                        if (res.status === 200) {
-                            getData()
-                        }
-                    }).catch((err) => {
-                        console.log(err);
-                    });
-                }
-            },
-        ]);
     }
 
     React.useEffect(() => {
@@ -71,7 +47,7 @@ const OrderTracking = ({ navigation }) => {
                         fontSize: 30,
                         fontWeight: 'bold',
                         textAlign: 'center'
-                    }}>Theo dõi đơn hàng</Text>
+                    }}>Lịch sử mua hàng</Text>
                 </View>
                 {
                     data.length == 0 ? (
@@ -120,8 +96,6 @@ const OrderTracking = ({ navigation }) => {
                                             fontSize: 20,
                                             fontWeight: 'bold'
                                         }}>{(item.totalAmount).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} VNĐ</Text>
-                                        {
-                                            item.status._id == '65427ebd6c0c1e32f27a859c' ? (
                                                 <TouchableOpacity style={{
                                                     backgroundColor: '#EFE3C8',
                                                     borderRadius: 10,
@@ -134,25 +108,8 @@ const OrderTracking = ({ navigation }) => {
                                                         fontWeight: 'bold',
                                                         paddingHorizontal: 15,
                                                         paddingVertical: 5
-                                                    }}>Đã nhận được hàng</Text>
+                                                    }}>Đánh giá sản phẩm</Text>
                                                 </TouchableOpacity>
-                                            ) : (
-                                                <View enabled={false} style={{
-                                                    backgroundColor: '#EFE3C8',
-                                                    borderRadius: 10,
-                                                    opacity: 0.7
-                                                }}
-                                                >
-                                                    <Text style={{
-                                                        color: '#201520',
-                                                        fontSize: 18,
-                                                        fontWeight: 'bold',
-                                                        paddingHorizontal: 15,
-                                                        paddingVertical: 5
-                                                    }}>Đã nhận được hàng</Text>
-                                                </View>
-                                            )
-                                        }
                                     </View>
                                 </View>
                             }
@@ -164,7 +121,7 @@ const OrderTracking = ({ navigation }) => {
     )
 }
 
-export default OrderTracking
+export default OrderHistory
 
 const styles = StyleSheet.create({
     container: {

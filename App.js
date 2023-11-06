@@ -17,6 +17,7 @@ import AddressList from './src/Screen/Main/Profile/Address/AddressList';
 import Payment from './src/Screen/Main/Cart/Payment';
 import OrderTracking from './src/Screen/Main/Profile/OrderTracking';
 import OrderDetails from './src/Screen/Main/Profile/OrderDetails';
+import OrderHistory from './src/Screen/Main/Profile/OrderHistory';
 
 const Stack = createStackNavigator();
 
@@ -35,6 +36,7 @@ export default function App() {
           <Stack.Screen name="AccountDetails" component={AccountDetails} options={{ headerShown: false }} />
           <Stack.Screen name="Address" component={Address} options={{ headerShown: false }} />
           <Stack.Screen name="OrderTracking" component={OrderTracking} options={{ headerShown: false }} />
+          <Stack.Screen name="OrderHistory" component={OrderHistory} options={{ headerShown: false }} />
           <Stack.Screen name="OrderDetails" component={OrderDetails} options={{ headerShown: false }} />
           <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: false }} />
           <Stack.Screen name="AddressList" component={AddressList} options={{ headerShown: false }} />

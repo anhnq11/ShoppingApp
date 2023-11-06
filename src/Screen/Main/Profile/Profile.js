@@ -105,7 +105,7 @@ const Profile = ({ navigation }) => {
           <TouchableOpacity style={styles.itemBox} onPress={() => navigation.navigate('OrderTracking')}>
             <Text style={styles.itemText}>Theo dõi đơn hàng</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.itemBox}>
+          <TouchableOpacity style={styles.itemBox} onPress={() => navigation.navigate('OrderHistory')}>
             <Text style={styles.itemText}>Lịch sử mua hàng</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.itemBox}>

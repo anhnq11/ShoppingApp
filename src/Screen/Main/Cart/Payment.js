@@ -76,7 +76,7 @@ const Payment = ({ navigation, route }) => {
             totalAmount: totalPrice,
             createdAt: new Date().toLocaleString(),
             userAddress: defaultAddress._id,
-            paymentMethod: defaultPaymentMethods._id
+            paymentMethod: defaultPaymentMethods._id,
         }
 
         axios({
