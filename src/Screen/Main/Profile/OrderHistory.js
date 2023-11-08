@@ -100,7 +100,15 @@ const OrderHistory = ({ navigation }) => {
                                                     backgroundColor: '#EFE3C8',
                                                     borderRadius: 10,
                                                 }}
-                                                    onPress={() => updateInvoice({ item })}
+                                                    onPress={() => {
+                                                        Alert.alert('Thông báo', 'Vui lòng thử lại sau!', [
+                                                            {
+                                                              text: 'Cancel',
+                                                              onPress: () => console.log('Cancel Pressed'),
+                                                              style: 'cancel',
+                                                            }
+                                                          ]);
+                                                    }}
                                                 >
                                                     <Text style={{
                                                         color: '#201520',

@@ -6,8 +6,6 @@ const OrderDetails = ({ route, navigation }) => {
 
     const { data } = route.params
 
-    console.log('data', data);
-
     return (
         <View style={styles.container}>
             <View style={{

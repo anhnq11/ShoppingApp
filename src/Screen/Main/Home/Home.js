@@ -10,6 +10,7 @@ import logoImg from '../../../../assets/png/image2.png';
 import URL from '../../../UrlApi';
 import ProductItem from '../../../Comps/ProductItem/ProductItem';
 import SwiperComp from '../../../Comps/Swiper/SwiperComp';
+import axios from 'axios';
 let windowWidth = Dimensions.get('window').width;
 let windowHeight = Dimensions.get('window').height;
 
@@ -18,6 +19,8 @@ const Home = ({ navigation }) => {
 
   const [isLoading, setisLoading] = useState(false);
   const [favoursList, setfavoursList] = useState([]);
+  const [newProducts, setNewProducts] = useState([])
+  const [recentOrder, setRecentOrder] = useState([])
 
   // Lấy danh sách các sản phẩm yêu thích
   const getFavours = () => {
@@ -34,19 +37,49 @@ const Home = ({ navigation }) => {
       });
   }
 
+  const getNewProducts = () => {
+    axios({
+      method: 'get',
+      url: `${URL}products/newproducts`,
+    }).then((res) => {
+      if (res.status === 200) {
+        setNewProducts(res.data)
+      }
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
+  const getRecentOrder = () => {
+    axios({
+      method: 'get',
+      url: `${URL}products/recentOrder?user_id=` + user._id,
+    }).then((res) => {
+      if (res.status === 200) {
+        setRecentOrder(res.data)
+      }
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
   React.useEffect(() => {
     const tabPress = navigation.addListener('tabPress', (e) => {
       getFavours();
+      getNewProducts();
+      getRecentOrder();
     });
 
     getFavours();
+    getNewProducts();
+    getRecentOrder();
 
     return tabPress;
   }, [navigation]);
 
   return (
     <SafeAreaView>
-      <View style={[Style.container, { width: windowWidth, height: windowHeight }]} >
+      <View style={[Style.container, { width: windowWidth, height: '100%' }]} >
         < ScrollView >
           {/* Top layout */}
           <View style={Style.topLayout} >
@@ -71,8 +104,12 @@ const Home = ({ navigation }) => {
             </View>
           </View>
           {/* Bottom layout */}
-          <View style={Style.bottomLayout} >
+          <View style={{
+            height: 200
+          }}>
             <SwiperComp></SwiperComp>
+          </View>
+          <View style={Style.bottomLayout} >
             <View>
               <View>
                 <Text style={Style.listHeader} >Yêu thích</Text>
@@ -90,31 +127,31 @@ const Home = ({ navigation }) => {
                 </View>
               </View>
               <View>
-                <Text style={Style.listHeader} >Yêu thích</Text>
+                <Text style={Style.listHeader} >Sản phẩm mới</Text>
                 <View>
                   <FlatList
-                    data={favoursList}
+                    data={newProducts}
                     keyExtractor={(item) => item._id}
                     key={(item) => item._id}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     renderItem={({ item }) =>
-                      <ProductItem inHome={true} item={item.product_id} />
+                      <ProductItem item={item} navigation={navigation} />
                     }
                   />
                 </View>
               </View>
               <View>
-                <Text style={Style.listHeader} >Yêu thích</Text>
+                <Text style={Style.listHeader} >Mua gần đây</Text>
                 <View>
                   <FlatList
-                    data={favoursList}
+                    data={recentOrder}
                     keyExtractor={(item) => item._id}
                     key={(item) => item._id}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     renderItem={({ item }) =>
-                      <ProductItem inHome={true} item={item.product_id} />
+                    <ProductItem item={item.product_id} navigation={navigation} />
                     }
                   />
                 </View>

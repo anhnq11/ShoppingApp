@@ -40,7 +40,7 @@ export default StyleSheet.create({
     // Bottom layout
     bottomLayout: {
         marginTop: 10,
-        height: '100%', 
+        height: '85%', 
     },
     imgFeature:{
         width: '100%',

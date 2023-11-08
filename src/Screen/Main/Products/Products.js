@@ -16,6 +16,8 @@ const Products = ({ navigation }) => {
   const user = useSelector(selectUser);
 
   const [productList, setproductList] = useState([]);
+  const [queryText, setQueryText] = useState(null);
+  const [queryData, setQueryData] = useState([])
 
   const getProducts = () => {
     let mUrl = URL + 'products/products';
@@ -29,6 +31,12 @@ const Products = ({ navigation }) => {
       .catch(error => {
         console.error(error);
       });
+  }
+
+  const handleSearch = (text) => {
+    const formattedText =  text.toLowerCase();
+    const rs = productList.filter((item) => (item.name).toLowerCase().includes(formattedText));
+    setQueryData(rs)
   }
 
   React.useEffect(() => {
@@ -61,11 +69,19 @@ const Products = ({ navigation }) => {
         <View style={Style.bottomLayout} >
           <View style={Style.searchBox} >
             <FontAwesome name='search' style={Style.searchContent} />
-            <TextInput type="text" placeholder='Tìm kiếm sản phẩm...' placeholderTextColor={'#EFE3C8'} style={[Style.searchContent, { marginLeft: 10 }]} onChangeText={(text) => { }} />
+            <TextInput type="text" 
+            placeholder='Tìm kiếm sản phẩm...' 
+            placeholderTextColor={'#EFE3C8'} 
+            style={[Style.searchContent, { marginLeft: 10 }]} 
+            onChangeText={(text) => {
+              handleSearch(text)
+              setQueryText(text)
+            }} 
+            />
           </View>
           <View>
             <FlatList
-              data={productList}
+              data={queryText ? queryData : productList}
               keyExtractor={(item) => item._id}
               key={(item) => item._id}
               horizontal={false}
