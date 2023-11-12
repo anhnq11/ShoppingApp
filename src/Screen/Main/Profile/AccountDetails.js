@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { login, selectUser } from '../../../Redux/Reducer/Reducer'
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 import URL from '../../../UrlApi'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -26,23 +27,27 @@ const AccountDetails = ({ navigation }) => {
             quality: 1,
         });
 
-        console.log(result);
-
         if (!result.canceled) {
-            setImage(result.assets[0].uri);
+            let _uri = result.assets[0].uri;
+            let file_ext = _uri.substring(_uri.lastIndexOf('.') + 1);
+
+            FileSystem.readAsStringAsync(result.assets[0].uri, { encoding: 'base64' })
+                .then((res) => {
+                    setImage("data:image/" + file_ext + ";base64," + res);
+                });
         }
     }
 
     const handleUpdate = async () => {
 
         setError(null);
-        
-        if(!fullname || !phonenum || !email){
+
+        if (!fullname || !phonenum || !email) {
             setError('Vui lòng điền đầy đủ thông tin!')
             return;
         }
 
-        if ( !isEmail(email) || !isPhoneNumber(phonenum) ){
+        if (!isEmail(email) || !isPhoneNumber(phonenum)) {
             setError('Số điện thoại hoặc Email không đúng định dạng!')
             return;
         }
@@ -58,7 +63,11 @@ const AccountDetails = ({ navigation }) => {
         await axios({
             method: 'post',
             url: `${URL}users/update`,
-            data: data
+            data: JSON.stringify(data),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
         })
             .then((res) => {
                 if (res.status == 200) {
@@ -143,15 +152,15 @@ const AccountDetails = ({ navigation }) => {
             </Text>
             {
                 error ? (
-            <Text style={{
-                width: '100%',
-                color: 'red',
-                fontSize: 17,
-                marginTop: 10,
-                fontStyle: 'italic'
-            }}>
-                *{ error }
-            </Text>
+                    <Text style={{
+                        width: '100%',
+                        color: 'red',
+                        fontSize: 17,
+                        marginTop: 10,
+                        fontStyle: 'italic'
+                    }}>
+                        *{error}
+                    </Text>
                 ) : (<View></View>)
             }
             <TextInput

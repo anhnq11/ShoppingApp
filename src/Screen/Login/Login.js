@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, TextInput, Alert } from 'react-native'
+import { View, Text, Image, TouchableOpacity, TextInput, Alert, ToastAndroid } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react'
 import { useState } from 'react'
@@ -75,7 +75,7 @@ const Login = ({ navigation }) => {
       <View style={Style.bottomLayout}>
         <Text style={Style.headerText}>Đăng nhập</Text>
         <TextInput
-          type="text"
+          keyboardType='numeric'
           placeholder='Số điện thoại...'
           placeholderTextColor={'#EFE3C8'}
           style={Style.input}
