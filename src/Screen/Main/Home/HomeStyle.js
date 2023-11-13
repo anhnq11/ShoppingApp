@@ -9,7 +9,7 @@ export default StyleSheet.create({
     // Top layout
     topLayout: {
         width: '100%',
-        height: '13%',
+        height: '15%',
         flexDirection: 'row',
     },
     // Left layout

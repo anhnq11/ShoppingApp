@@ -102,7 +102,7 @@ const OrderTracking = ({ navigation }) => {
                                         justifyContent: 'space-between'
                                     }}>
                                         <Text style={{
-                                            color: 'green',
+                                            color: item.status.status == 5 ? 'red' : 'green',
                                             fontSize: 17,
                                         }}>{item.status.name}</Text>
                                         <TouchableOpacity onPress={() => navigation.navigate('OrderDetails', { data: item })}>
@@ -121,7 +121,7 @@ const OrderTracking = ({ navigation }) => {
                                             fontWeight: 'bold'
                                         }}>{(item.totalAmount).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} VNĐ</Text>
                                         {
-                                            item.status._id == '65427ebd6c0c1e32f27a859c' ? (
+                                            item.status.status == 4 ? (
                                                 <TouchableOpacity style={{
                                                     backgroundColor: '#EFE3C8',
                                                     borderRadius: 10,
