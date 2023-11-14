@@ -111,21 +111,25 @@ const Home = ({ navigation }) => {
           </View>
           <View style={Style.bottomLayout} >
             <View>
-              <View>
-                <Text style={Style.listHeader} >Yêu thích</Text>
-                <View>
-                  <FlatList
-                    data={favoursList}
-                    keyExtractor={(item) => item._id}
-                    key={(item) => item._id}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    renderItem={({ item }) =>
-                      <ProductItem item={item.product_id} navigation={navigation} />
-                    }
-                  />
-                </View>
-              </View>
+              {
+                favoursList.length > 0 ? (
+                  <View>
+                    <Text style={Style.listHeader} >Yêu thích</Text>
+                    <View>
+                      <FlatList
+                        data={favoursList}
+                        keyExtractor={(item) => item._id}
+                        key={(item) => item._id}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={({ item }) =>
+                          <ProductItem item={item.product_id} navigation={navigation} />
+                        }
+                      />
+                    </View>
+                  </View>
+                ) : (<View></View>)
+              }
               <View>
                 <Text style={Style.listHeader} >Sản phẩm mới</Text>
                 <View>
@@ -141,21 +145,25 @@ const Home = ({ navigation }) => {
                   />
                 </View>
               </View>
-              <View>
-                <Text style={Style.listHeader} >Mua gần đây</Text>
-                <View>
-                  <FlatList
-                    data={recentOrder}
-                    keyExtractor={(item) => item._id}
-                    key={(item) => item._id}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    renderItem={({ item }) =>
-                    <ProductItem item={item.product_id} navigation={navigation} />
-                    }
-                  />
-                </View>
-              </View>
+              {
+                recentOrder.length > 0 ? (
+                  <View>
+                    <Text style={Style.listHeader} >Mua gần đây</Text>
+                    <View>
+                      <FlatList
+                        data={recentOrder}
+                        keyExtractor={(item) => item._id}
+                        key={(item) => item._id}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={({ item }) =>
+                          <ProductItem item={item.product_id} navigation={navigation} />
+                        }
+                      />
+                    </View>
+                  </View>
+                ) : (<View></View>)
+              }
             </View>
           </View>
         </ ScrollView >

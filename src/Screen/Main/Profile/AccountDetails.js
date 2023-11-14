@@ -61,26 +61,42 @@ const AccountDetails = ({ navigation }) => {
         }
 
         await axios({
-            method: 'post',
-            url: `${URL}users/update`,
-            data: JSON.stringify(data),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            }
+            method: 'get',
+            url: `${URL}users/checkRegis?phonenum=` + phonenum,
         })
             .then((res) => {
-                if (res.status == 200) {
-                    dispatch(login(res.data))
-                    saveUserData(res.data)
-                    ToastAndroid.show('Cập nhật thông tin thành công!', ToastAndroid.SHORT)
-                    navigation.goBack();
+                if (res.status !== 200) {
+                    console.log(res.status);
+                    setError('* Số điện thoại đã được sử dụng!')
                     return;
                 }
+                else {
+                    axios({
+                        method: 'post',
+                        url: `${URL}users/update`,
+                        data: JSON.stringify(data),
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                        .then((res) => {
+                            if (res.status == 200) {
+                                dispatch(login(res.data))
+                                saveUserData(res.data)
+                                ToastAndroid.show('Cập nhật thông tin thành công!', ToastAndroid.SHORT)
+                                navigation.goBack();
+                                return;
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                }
             })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            .catch((err) => {
+                console.log(err);
+            })
     }
 
     // Lưu thông tin người dùng khi đăng nhập thành công

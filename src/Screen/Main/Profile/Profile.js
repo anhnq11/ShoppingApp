@@ -1,12 +1,13 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native'
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { selectUser } from '../../../Redux/Reducer/Reducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { logout, selectUser } from '../../../Redux/Reducer/Reducer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { onPress } from 'deprecated-react-native-prop-types/DeprecatedTextPropTypes'
 
 const Profile = ({ navigation }) => {
 
+  const dispatch = useDispatch();
   const user = useSelector(selectUser)
 
   return (
@@ -120,9 +121,9 @@ const Profile = ({ navigation }) => {
                   style: 'cancel',
                 },
                 {
-                  text: 'OK', onPress: () => {
+                  text: 'OK', onPress: async () => {
+                    await AsyncStorage.clear()
                     // dispatch(logout())
-                    AsyncStorage.clear()
                     navigation.navigate('Login')
                   }
                 },
