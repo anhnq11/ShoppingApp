@@ -134,7 +134,7 @@ const ProductDetails = ({ route, navigation }) => {
         </View>
         <View style={{ paddingTop: 2, height: '45%' }}>
           <Text style={[styles.itemName, { marginTop: 5 }]} >{item.name}</Text>
-          <Text style={[styles.itemName, { fontSize: 21 }]}>Giá bán: {item.price} VNĐ</Text>
+          <Text style={[styles.itemName, { fontSize: 21 }]}>Giá bán: {item.price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} VNĐ</Text>
           <Text style={{ color: 'white', fontSize: 18, marginTop: 5 }} >{item.desc}</Text>
           <View>
             {/* Select size */}

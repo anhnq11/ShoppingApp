@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, Pressable } from 'react-native'
+import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, Pressable, ToastAndroid } from 'react-native'
 import React from 'react'
 import { Icon } from '@rneui/themed'
 import { useState, useEffect } from 'react'
@@ -16,6 +16,7 @@ const AddressList = ({ navigation }) => {
     const [districtId, setDistrictId] = useState('0')
     const [ward, setWard] = useState(null)
     const [wardId, setWardId] = useState('0')
+    const [error, setError] = useState(null)
 
     const dataAddress = ward + ', ' + district + ', ' + province;
 
@@ -44,6 +45,7 @@ const AddressList = ({ navigation }) => {
                 setWard(null)
                 setWardId('0')
                 setDataType('d')
+                setError(null)
             }
                 break
             case 'd': {
@@ -53,10 +55,12 @@ const AddressList = ({ navigation }) => {
                 setWard(null)
                 setWardId('0')
                 setDataType('w')
+                setError(null)
             }
                 break
             case 'w': {
                 setWard(item.division_name)
+                setError(null)
                 if (province && district && ward) {
                     console.log('Donee' + dataAddress);
                     navigation.navigate('AddAddress', {
@@ -76,6 +80,17 @@ const AddressList = ({ navigation }) => {
                 }
             }
                 break
+        }
+    }
+
+    const addAddress = () => {
+        if (province && district && ward) {
+            navigation.navigate('AddAddress', {
+                address: dataAddress
+            })
+        }
+        else {
+            setError('Vui lòng chọn đúng địa chỉ!')
         }
     }
 
@@ -198,7 +213,7 @@ const AddressList = ({ navigation }) => {
                 {/*  */}
                 <View style={{
                     marginVertical: 10,
-                    height: '80%',
+                    height: '75%',
                     backgroundColor: '#EFE3C8',
                     borderRadius: 10
                 }}>
@@ -224,7 +239,40 @@ const AddressList = ({ navigation }) => {
                     />
                 </View>
             </View>
-        </View>
+            <View style={{
+                width: '100%',
+                position: 'absolute',
+                bottom: 10
+            }}>
+                {
+                    error ? (<Text style={{
+                        color: 'red',
+                        fontSize: 17,
+                        textAlign: 'center',
+                        marginBottom: 10
+                    }}>{error}</Text>) : (<View></View>)
+                }
+                <TouchableOpacity style={{
+                    width: '100%',
+                    backgroundColor: '#EFE3C8',
+                    marginBottom: 10,
+                    borderRadius: 20,
+                    paddingVertical: 4,
+                    borderColor: '#EFE3C8',
+                    borderWidth: 2,
+                }} onPress={() => {
+                    // Check account
+                    addAddress();
+                }}>
+                    <Text style={{
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                        fontSize: 25,
+                        color: '#201520'
+                    }}>Thêm địa chỉ</Text>
+                </TouchableOpacity>
+            </View>
+        </View >
     )
 }
 

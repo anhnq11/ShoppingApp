@@ -75,7 +75,7 @@ const OrderTracking = ({ navigation }) => {
                 </View>
                 {
                     data.length == 0 ? (
-                        <Text style={[styles.receive_add]}>Không có đơn hàng</Text>
+                        <Text style={[styles.receive_add, {textAlign: 'center', marginTop: '50%'}]}>Không có đơn hàng</Text>
                     ) : (
                         <FlatList
                             data={data}
