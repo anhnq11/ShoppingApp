@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
 import React from 'react'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -9,8 +9,11 @@ import { useDispatch } from 'react-redux'
 import { updateCartQuantity } from '../../../Redux/Reducer/Reducer'
 import { SwipeListView } from 'react-native-swipe-list-view'
 import { Icon } from '@rneui/themed'
+import { useIsFocused } from '@react-navigation/native';
+
 const Cart = ({ navigation }) => {
 
+  const isFocused = useIsFocused()
   const dispatch = useDispatch();
 
   const user = useSelector(selectUser);
@@ -106,6 +109,12 @@ const Cart = ({ navigation }) => {
     getProducts();
     return tabPress;
   }, [isLoading]);
+
+  React.useEffect(() => {
+    if (isFocused) {
+      getProducts()
+    }
+  }, [isFocused]);
 
   return (
     <View>
@@ -206,72 +215,74 @@ const Cart = ({ navigation }) => {
                   </View>
                 )}
                 renderItem={({ item }) =>
-                  <View item={item} style={{
-                    backgroundColor: '#362C36',
-                    flexDirection: 'row',
-                    padding: 10,
-                    borderRadius: 10,
-                    marginBottom: 10
-                  }}>
-                    <View style={{
-                      width: 70,
-                      height: 70,
+                  <TouchableWithoutFeedback onPress={() => navigation.navigate('Details', { item: item.product_id })}>
+                    <View item={item} style={{
+                      backgroundColor: '#362C36',
+                      flexDirection: 'row',
+                      padding: 10,
                       borderRadius: 10,
-                      overflow: 'hidden',
-                      marginRight: 10
+                      marginBottom: 10
                     }}>
-                      <Image
-                        source={{ uri: item.product_id.image }}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          resizeMode: 'cover',
-                        }}
-                      />
-                    </View>
-                    <View style={{ width: '75%' }}>
-                      <Text style={{
-                        height: 26,
-                        color: '#EFE3C8',
-                        fontSize: 20,
-                        fontWeight: 'bold'
-                      }}>
-                        {item.product_id.name}
-                      </Text>
                       <View style={{
-                        flexDirection: 'row',
+                        width: 70,
+                        height: 70,
+                        borderRadius: 10,
+                        overflow: 'hidden',
+                        marginRight: 10
                       }}>
+                        <Image
+                          source={{ uri: item.product_id.image }}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'cover',
+                          }}
+                        />
+                      </View>
+                      <View style={{ width: '75%' }}>
                         <Text style={{
+                          height: 26,
                           color: '#EFE3C8',
-                          fontSize: 17,
+                          fontSize: 20,
+                          fontWeight: 'bold'
                         }}>
-                          Màu:{' '}
-                          <Text style={{ fontWeight: 'bold' }}>
-                            {item.color}
-                          </Text>
-                          {' '}- Size:{' '}
-                          <Text style={{ fontWeight: 'bold' }}>
-                            {item.size}
-                          </Text>
+                          {item.product_id.name}
                         </Text>
-                        <Text style={{
-                          position: 'absolute',
-                          color: '#EFE3C8',
-                          fontSize: 17,
-                          right: 10
+                        <View style={{
+                          flexDirection: 'row',
                         }}>
-                          x{item.quantity}
+                          <Text style={{
+                            color: '#EFE3C8',
+                            fontSize: 17,
+                          }}>
+                            Màu:{' '}
+                            <Text style={{ fontWeight: 'bold' }}>
+                              {item.color}
+                            </Text>
+                            {' '}- Size:{' '}
+                            <Text style={{ fontWeight: 'bold' }}>
+                              {item.size}
+                            </Text>
+                          </Text>
+                          <Text style={{
+                            position: 'absolute',
+                            color: '#EFE3C8',
+                            fontSize: 17,
+                            right: 10
+                          }}>
+                            x{item.quantity}
+                          </Text>
+                        </View>
+                        <Text style={{
+                          color: '#EFE3C8',
+                          fontSize: 18,
+                          fontWeight: 'bold'
+                        }}>
+                          {(item.price).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} VNĐ
                         </Text>
                       </View>
-                      <Text style={{
-                        color: '#EFE3C8',
-                        fontSize: 18,
-                        fontWeight: 'bold'
-                      }}>
-                        {(item.price * item.quantity).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} VNĐ
-                      </Text>
                     </View>
-                  </View>
+                  </TouchableWithoutFeedback>
                 }
               />
             </View>

@@ -9,13 +9,12 @@ export default StyleSheet.create({
     // Top layout
     topLayout: {
         width: '100%',
-        height: 160,
+        height: 100,
         flexDirection: 'row',
     },
     // Left layout
     leftLayout: {
-        width: '70%',
-        height: '100%',
+        width: '75%',
         justifyContent: 'center',
     },
     text: {
@@ -24,10 +23,10 @@ export default StyleSheet.create({
     },
     // Right layout
     rightLayout: {
-        width: '30%',
+        width: '25%',
         height: '100%',
         justifyContent: 'center',
-        alignItems: 'flex-end',
+        alignItems: 'center',
     },
     imgAvatar: {
         width: 65,
@@ -58,7 +57,7 @@ export default StyleSheet.create({
     listHeader: {
         color: '#EFE3C8',
         fontSize: 23,
-        marginVertical: 5,
+        marginBottom: 10,
         fontWeight: 'bold'
     }
 })

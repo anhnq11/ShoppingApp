@@ -88,7 +88,6 @@ const Home = ({ navigation }) => {
               <View>
                 <Image style={{ width: 220, resizeMode: 'contain' }} source={logoImg} />
               </View>
-              <Text style={Style.text} >Xin chào, <Text style={[Style.text, { fontWeight: 'bold' }]} >{user.fullname}</Text> </Text>
             </View>
             {/* Right layout */}
             <View style={Style.rightLayout} >
@@ -103,9 +102,11 @@ const Home = ({ navigation }) => {
               </View>
             </View>
           </View>
+          <Text style={Style.text} >Xin chào, <Text style={[Style.text, { fontWeight: 'bold'}]} >{user.fullname}</Text> </Text>
           {/* Bottom layout */}
           <View style={{
-            height: 200
+            height: 200,
+            marginTop: 10
           }}>
             <SwiperComp></SwiperComp>
           </View>

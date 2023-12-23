@@ -103,6 +103,7 @@ const ProductDetails = ({ route, navigation }) => {
     }).then((res) => {
       if (res.data) {
         ToastAndroid.show('Đã thêm sản phẩm vào giỏ hàng!', ToastAndroid.SHORT);
+        navigation.navigate('Cart')
       }
     })
   }
@@ -118,7 +119,7 @@ const ProductDetails = ({ route, navigation }) => {
         <View style={styles.prdImageBox}>
           <Image style={styles.imageBox} source={{ uri: item.image }} />
           <View style={{ position: 'absolute', width: '100%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 12, paddingVertical: 8 }}>
-            <TouchableOpacity style={styles.backgroundIconBack} onPress={() => navigation.navigate('Products')}>
+            <TouchableOpacity style={styles.backgroundIconBack} onPress={() => navigation.goBack()}>
               <Icon name='arrowleft' type='antdesign' size={30} color={'white'} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.backgroundIconBack} onPress={() => navigation.navigate('Cart')}>

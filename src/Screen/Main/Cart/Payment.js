@@ -6,7 +6,8 @@ import {
     Image,
     FlatList,
     TextInput,
-    ToastAndroid
+    ToastAndroid,
+    TouchableWithoutFeedback
 } from 'react-native'
 import React from 'react'
 import { useSelector } from 'react-redux';
@@ -135,7 +136,10 @@ const Payment = ({ navigation, route }) => {
                                     textAlign: 'center'
                                 }}>Thanh toán</Text>
                             </View>
-                            <View
+                            <TouchableOpacity onPress={() => {
+                                setIsVisible(true)
+                                setModalName('USER_INFO')
+                            }}
                                 style={{
                                     flexDirection: 'row',
                                     paddingBottom: 5,
@@ -170,17 +174,14 @@ const Payment = ({ navigation, route }) => {
                                             ) : (<View></View>)
                                         }
                                     </View>
-                                    <TouchableOpacity
+                                    <View
                                         style={{
                                             position: 'absolute',
                                             right: 0
                                         }}
-                                        onPress={() => {
-                                            setIsVisible(true)
-                                            setModalName('USER_INFO')
-                                        }}>
+                                    >
                                         <Icon name='right' style={{ textAlignVertical: 'center' }} type='antdesign' size={25} color={'#EFE3C8'} />
-                                    </TouchableOpacity>
+                                    </View>
                                     <View>
                                         <Modal isVisible={isVisible}>
                                             {
@@ -352,7 +353,7 @@ const Payment = ({ navigation, route }) => {
                                         </Modal>
                                     </View>
                                 </View>
-                            </View>
+                            </TouchableOpacity>
                         </View>
                     }
                     data={productList}
@@ -360,112 +361,114 @@ const Payment = ({ navigation, route }) => {
                     key={(item) => item._id}
                     showsVerticalScrollIndicator={false}
                     renderItem={({ item }) =>
-                        <View item={item} style={{
-                            backgroundColor: '#362C36',
-                            flexDirection: 'row',
-                            padding: 10,
-                            borderRadius: 10,
-                            marginBottom: 10
-                        }}>
+                        <TouchableWithoutFeedback item={item} onPress={() => navigation.navigate('Details', { item: item.product_id })}>
                             <View style={{
-                                width: 65,
-                                height: 65,
+                                backgroundColor: '#362C36',
+                                flexDirection: 'row',
+                                padding: 10,
                                 borderRadius: 10,
-                                overflow: 'hidden',
-                                marginRight: 10
+                                marginBottom: 10
                             }}>
-                                <Image
-                                    source={{ uri: item.product_id.image }}
-                                    style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        resizeMode: 'cover',
-                                    }}
-                                />
-                            </View>
-                            <View style={{ width: '75%' }}>
-                                <Text style={{
-                                    color: '#EFE3C8',
-                                    fontSize: 18,
-                                }}>
-                                    {item.product_id.name}
-                                </Text>
                                 <View style={{
-                                    flexDirection: 'row',
+                                    width: 65,
+                                    height: 65,
+                                    borderRadius: 10,
+                                    overflow: 'hidden',
+                                    marginRight: 10
                                 }}>
+                                    <Image
+                                        source={{ uri: item.product_id.image }}
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            resizeMode: 'cover',
+                                        }}
+                                    />
+                                </View>
+                                <View style={{ width: '75%' }}>
                                     <Text style={{
                                         color: '#EFE3C8',
-                                        fontSize: 15,
+                                        fontSize: 18,
                                     }}>
-                                        Phân loại: Màu: {item.color} - Size: {item.size}
+                                        {item.product_id.name}
                                     </Text>
-                                    <Text style={{
-                                        position: 'absolute',
-                                        color: '#EFE3C8',
-                                        fontSize: 15,
-                                        right: 0
+                                    <View style={{
+                                        flexDirection: 'row',
                                     }}>
-                                        x{item.quantity}
+                                        <Text style={{
+                                            color: '#EFE3C8',
+                                            fontSize: 15,
+                                        }}>
+                                            Phân loại: Màu: {item.color} - Size: {item.size}
+                                        </Text>
+                                        <Text style={{
+                                            position: 'absolute',
+                                            color: '#EFE3C8',
+                                            fontSize: 15,
+                                            right: 0
+                                        }}>
+                                            x{item.quantity}
+                                        </Text>
+                                    </View>
+                                    <Text style={{
+                                        color: '#EFE3C8',
+                                        fontSize: 16,
+                                    }}>
+                                        {(item.price).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} VNĐ
                                     </Text>
                                 </View>
-                                <Text style={{
-                                    color: '#EFE3C8',
-                                    fontSize: 16,
-                                }}>
-                                    {(item.price).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} VNĐ
-                                </Text>
                             </View>
-                        </View>
+                        </TouchableWithoutFeedback>
                     }
                     ListFooterComponent={
                         <View style={{ width: '100%', marginBottom: '15%' }}>
-                            <View
-                                style={{
-                                    paddingVertical: 10,
-                                    marginVertical: 10,
-                                    borderTopWidth: 1,
-                                    borderStyle: 'dashed',
-                                    borderColor: '#EFE3C8'
-                                }}>
-                                <View style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                }}>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Image
-                                            style={{
-                                                width: 25,
-                                                height: 25,
-                                                tintColor: '#EFE3C8',
-                                                resizeMode: 'contain',
-                                                marginRight: 10
-                                            }}
-                                            source={{ uri: 'https://webstockreview.net/images/coin-clipart-dollar-sign-13.png' }} />
-                                        <Text style={[styles.receive_add, { marginBottom: 5, fontSize: 19, fontWeight: 'bold' }]}> Phương thức thanh toán</Text>
-                                    </View>
-                                    <TouchableOpacity onPress={() => {
-                                        setIsVisible(true)
-                                        setModalName('PAYMENT_METHODS')
+                            <TouchableWithoutFeedback onPress={() => {
+                                setIsVisible(true)
+                                setModalName('PAYMENT_METHODS')
+                            }}>
+                                <View
+                                    style={{
+                                        paddingVertical: 10,
+                                        marginVertical: 10,
+                                        borderTopWidth: 1,
+                                        borderStyle: 'dashed',
+                                        borderColor: '#EFE3C8'
                                     }}>
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                    }}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Image
+                                                style={{
+                                                    width: 25,
+                                                    height: 25,
+                                                    tintColor: '#EFE3C8',
+                                                    resizeMode: 'contain',
+                                                    marginRight: 10
+                                                }}
+                                                source={{ uri: 'https://webstockreview.net/images/coin-clipart-dollar-sign-13.png' }} />
+                                            <Text style={[styles.receive_add, { marginBottom: 5, fontSize: 19, fontWeight: 'bold' }]}> Phương thức thanh toán</Text>
+                                        </View>
                                         <Icon name='right' style={{}} type='antdesign' size={25} color={'#EFE3C8'} />
-                                    </TouchableOpacity>
+                                    </View>
+                                    {
+                                        defaultPaymentMethods ? (
+                                            <Text style={[styles.receive_add, { marginLeft: 35 }]}>{defaultPaymentMethods.name}</Text>
+                                        ) : (
+                                            <Text style={{
+                                                marginLeft: 35,
+                                                fontSize: 16,
+                                                color: 'red',
+                                                fontStyle: 'italic'
+                                            }}>
+                                                * Chọn phương thức thanh toán
+                                            </Text>
+                                        )
+                                    }
                                 </View>
-                                {
-                                    defaultPaymentMethods ? (
-                                        <Text style={[styles.receive_add, { marginLeft: 35 }]}>{defaultPaymentMethods.name}</Text>
-                                    ) : (
-                                        <Text style={{
-                                            marginLeft: 35,
-                                            fontSize: 16,
-                                            color: 'red',
-                                            fontStyle: 'italic'
-                                        }}>
-                                            * Chọn phương thức thanh toán
-                                        </Text>
-                                    )
-                                }
-                            </View>
+                            </TouchableWithoutFeedback>
                             {/*  */}
                             <View
                                 style={{
