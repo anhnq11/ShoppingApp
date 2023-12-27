@@ -1,7 +1,8 @@
-import { View, Text, Image, ScrollView, FlatList, SafeAreaView } from 'react-native'
+import { View, Text, Image, ScrollView, FlatList, SafeAreaView, ActivityIndicator, RefreshControl } from 'react-native'
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { Dimensions } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../../Redux/Reducer/Reducer';
 
@@ -12,10 +13,10 @@ import ProductItem from '../../../Comps/ProductItem/ProductItem';
 import SwiperComp from '../../../Comps/Swiper/SwiperComp';
 import axios from 'axios';
 let windowWidth = Dimensions.get('window').width;
-let windowHeight = Dimensions.get('window').height;
 
 const Home = ({ navigation }) => {
   const user = useSelector(selectUser);
+  const isFocused = useIsFocused()
 
   const [isLoading, setisLoading] = useState(false);
   const [favoursList, setfavoursList] = useState([]);
@@ -63,24 +64,35 @@ const Home = ({ navigation }) => {
     });
   }
 
+  const getData = () => {
+    setisLoading(true)
+    Promise.all([getFavours(), getNewProducts(), getRecentOrder()])
+      .then(() => {
+        setisLoading(false)
+      })
+      .catch((err) => {
+        console.log('Something went wrong!' + err);
+      });
+  }
+
   React.useEffect(() => {
     const tabPress = navigation.addListener('tabPress', (e) => {
-      getFavours();
-      getNewProducts();
-      getRecentOrder();
+      getData()
     });
-
-    getFavours();
-    getNewProducts();
-    getRecentOrder();
-
+    getData()
     return tabPress;
   }, [navigation]);
+
+  React.useEffect(() => {
+    if(isFocused){
+      getData()
+    }
+  }, [ isFocused ]);
 
   return (
     <SafeAreaView>
       <View style={[Style.container, { width: windowWidth, height: '100%' }]} >
-        < ScrollView >
+        < ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={getData} />}>
           {/* Top layout */}
           <View style={Style.topLayout} >
             {/* Left layout */}
@@ -102,7 +114,7 @@ const Home = ({ navigation }) => {
               </View>
             </View>
           </View>
-          <Text style={Style.text} >Xin chào, <Text style={[Style.text, { fontWeight: 'bold'}]} >{user.fullname}</Text> </Text>
+          <Text style={Style.text} >Xin chào, <Text style={[Style.text, { fontWeight: 'bold' }]} >{user.fullname}</Text> </Text>
           {/* Bottom layout */}
           <View style={{
             height: 200,
@@ -110,63 +122,66 @@ const Home = ({ navigation }) => {
           }}>
             <SwiperComp></SwiperComp>
           </View>
-          <View style={Style.bottomLayout} >
-            <View>
-              {
-                favoursList.length > 0 ? (
+          {
+            isLoading ? <ActivityIndicator size={'large'} style={{ marginTop: 20 }} /> :
+              <View style={Style.bottomLayout} >
+                <View>
+                  {
+                    favoursList.length > 0 ? (
+                      <View>
+                        <Text style={Style.listHeader} >Yêu thích</Text>
+                        <View>
+                          <FlatList
+                            data={favoursList}
+                            keyExtractor={(item) => item._id}
+                            key={(item) => item._id}
+                            horizontal={true}
+                            showsHorizontalScrollIndicator={false}
+                            renderItem={({ item }) =>
+                              <ProductItem item={item.product_id} navigation={navigation} />
+                            }
+                          />
+                        </View>
+                      </View>
+                    ) : (<View></View>)
+                  }
                   <View>
-                    <Text style={Style.listHeader} >Yêu thích</Text>
+                    <Text style={Style.listHeader} >Sản phẩm mới</Text>
                     <View>
                       <FlatList
-                        data={favoursList}
+                        data={newProducts}
                         keyExtractor={(item) => item._id}
                         key={(item) => item._id}
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}
                         renderItem={({ item }) =>
-                          <ProductItem item={item.product_id} navigation={navigation} />
+                          <ProductItem item={item} navigation={navigation} />
                         }
                       />
                     </View>
                   </View>
-                ) : (<View></View>)
-              }
-              <View>
-                <Text style={Style.listHeader} >Sản phẩm mới</Text>
-                <View>
-                  <FlatList
-                    data={newProducts}
-                    keyExtractor={(item) => item._id}
-                    key={(item) => item._id}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    renderItem={({ item }) =>
-                      <ProductItem item={item} navigation={navigation} />
-                    }
-                  />
+                  {
+                    recentOrder.length > 0 ? (
+                      <View>
+                        <Text style={Style.listHeader} >Mua gần đây</Text>
+                        <View>
+                          <FlatList
+                            data={recentOrder}
+                            keyExtractor={(item) => item._id}
+                            key={(item) => item._id}
+                            horizontal={true}
+                            showsHorizontalScrollIndicator={false}
+                            renderItem={({ item }) =>
+                              <ProductItem item={item.product_id} navigation={navigation} />
+                            }
+                          />
+                        </View>
+                      </View>
+                    ) : (<View></View>)
+                  }
                 </View>
               </View>
-              {
-                recentOrder.length > 0 ? (
-                  <View>
-                    <Text style={Style.listHeader} >Mua gần đây</Text>
-                    <View>
-                      <FlatList
-                        data={recentOrder}
-                        keyExtractor={(item) => item._id}
-                        key={(item) => item._id}
-                        horizontal={true}
-                        showsHorizontalScrollIndicator={false}
-                        renderItem={({ item }) =>
-                          <ProductItem item={item.product_id} navigation={navigation} />
-                        }
-                      />
-                    </View>
-                  </View>
-                ) : (<View></View>)
-              }
-            </View>
-          </View>
+          }
         </ ScrollView >
       </View>
     </SafeAreaView>

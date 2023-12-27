@@ -1,4 +1,4 @@
-import { View, Text, Image, FlatList, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, Image, FlatList, TextInput, TouchableOpacity, RefreshControl } from 'react-native';
 import React from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -21,6 +21,7 @@ const Products = ({ navigation }) => {
   const [queryText, setQueryText] = useState(null)
   const [queryData, setQueryData] = useState([])
   const [active, setActive] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const getProducts = () => {
     axios({
@@ -60,14 +61,23 @@ const Products = ({ navigation }) => {
     setQueryData(rs)
   }
 
+  const getData = () => {
+    setIsLoading(true)
+    Promise.all([getProducts(), getListCats()])
+      .then(() => {
+        setIsLoading(false)
+      })
+      .catch((err) => {
+        console.log('Something went wrong!' + err);
+      });
+  }
+
   React.useEffect(() => {
     const tabPress = navigation.addListener('tabPress', (e) => {
-      getProducts();
-      getListCats()
+      getData()
     });
 
-    getProducts();
-    getListCats()
+    getData()
     return tabPress;
   }, [navigation]);
 
@@ -113,6 +123,7 @@ const Products = ({ navigation }) => {
               data={listCats}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
+              refreshControl={<RefreshControl refreshing={isLoading} onRefresh={getData} />}
               renderItem={({ item }) =>
                 <TouchableOpacity style={{
                   borderWidth: 1,

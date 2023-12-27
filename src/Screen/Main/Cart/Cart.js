@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, TouchableWithoutFeedback, ActivityIndicator } from 'react-native'
 import React from 'react'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -37,6 +37,7 @@ const Cart = ({ navigation }) => {
           setProductList([]);
           dispatch(updateCartQuantity(0));
         }
+        setIsLoading(false)
       })
       .catch((err) => {
         console.log(err);
@@ -108,7 +109,7 @@ const Cart = ({ navigation }) => {
     });
     getProducts();
     return tabPress;
-  }, [isLoading]);
+  }, [navigation]);
 
   React.useEffect(() => {
     if (isFocused) {
@@ -130,219 +131,224 @@ const Cart = ({ navigation }) => {
         >
           Giỏ hàng
         </Text>
-        {productList.length === 0 ? (<Text style={{
-          color: '#EFE3C8',
-          fontSize: 20,
-          textAlign: 'center',
-          marginTop: '50%'
-        }}>
-          Không có sản phẩm trong giỏ hàng!
-        </Text>) : (
-          <View style={{ width: '100%', height: '95%' }}>
-            <View style={{
-              height: '85%',
-            }}>
-              <SwipeListView
-                data={productList}
-                keyExtractor={(item) => item._id}
-                key={(item) => item._id}
-                horizontal={false}
-                leftOpenValue={75}
-                rightOpenValue={-170}
-                stopLeftSwipe={94}
-                stopRightSwipe={-200}
-                renderHiddenItem={({ item }) => (
+        {
+          isLoading ?
+            <ActivityIndicator isLoading={isLoading} size={'large'} /> : <View style={{ width: '100%', height: '100%' }}>
+              {productList.length === 0 ? (<Text style={{
+                color: '#EFE3C8',
+                fontSize: 20,
+                textAlign: 'center',
+                marginTop: '50%'
+              }}>
+                Không có sản phẩm trong giỏ hàng!
+              </Text>) : (
+                <View style={{ width: '100%', height: '95%' }}>
+                  <View style={{
+                    height: '85%',
+                  }}>
+                    <SwipeListView
+                      data={productList}
+                      keyExtractor={(item) => item._id}
+                      key={(item) => item._id}
+                      horizontal={false}
+                      leftOpenValue={75}
+                      rightOpenValue={-170}
+                      stopLeftSwipe={94}
+                      stopRightSwipe={-200}
+                      renderHiddenItem={({ item }) => (
+                        <View style={{
+                          width: '100%',
+                          height: '90%',
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          alignItems: 'center'
+                        }}>
+                          <TouchableOpacity style={{
+                            backgroundColor: '#C94C4C',
+                            width: 65,
+                            height: '100%',
+                            borderRadius: 10,
+                            justifyContent: 'center'
+                          }}
+                            onPress={() => handleDelete({ item })}
+                          >
+                            <Icon name='delete' type='antdesign' size={30} color={'white'} />
+                          </TouchableOpacity>
+                          <View style={{
+                            width: 160,
+                            height: '100%',
+                            backgroundColor: '#362C36',
+                            borderRadius: 10,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'row'
+                          }}>
+                            <TouchableOpacity style={{
+                              width: 35,
+                              height: 35,
+                              backgroundColor: '#EFE3C8',
+                              borderRadius: 10,
+                              justifyContent: 'center'
+                            }}
+                              onPress={() => handleRemove({ item })}
+                            >
+                              <Icon name='minus' type='antdesign' size={30} color={'#362C36'} />
+                            </TouchableOpacity>
+                            <Text style={{
+                              width: 50,
+                              height: 35,
+                              backgroundColor: '#201520',
+                              color: '#EFE3C8',
+                              fontSize: 23,
+                              fontWeight: 'bold',
+                              justifyContent: 'center',
+                              textAlign: 'center'
+                            }}>{item.quantity}</Text>
+                            <TouchableOpacity style={{
+                              width: 35,
+                              height: 35,
+                              backgroundColor: '#EFE3C8',
+                              borderRadius: 10,
+                              justifyContent: 'center'
+                            }}
+                              onPress={() => handleAdd({ item })}
+                            >
+                              <Icon name='plus' type='antdesign' size={30} color={'#362C36'} />
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      )}
+                      renderItem={({ item }) =>
+                        <TouchableWithoutFeedback onPress={() => navigation.navigate('Details', { item: item.product_id })}>
+                          <View item={item} style={{
+                            backgroundColor: '#362C36',
+                            flexDirection: 'row',
+                            padding: 10,
+                            borderRadius: 10,
+                            marginBottom: 10
+                          }}>
+                            <View style={{
+                              width: 70,
+                              height: 70,
+                              borderRadius: 10,
+                              overflow: 'hidden',
+                              marginRight: 10
+                            }}>
+                              <Image
+                                source={{ uri: item.product_id.image }}
+                                style={{
+                                  width: '100%',
+                                  height: '100%',
+                                  resizeMode: 'cover',
+                                }}
+                              />
+                            </View>
+                            <View style={{ width: '75%' }}>
+                              <Text style={{
+                                height: 26,
+                                color: '#EFE3C8',
+                                fontSize: 20,
+                                fontWeight: 'bold'
+                              }}>
+                                {item.product_id.name}
+                              </Text>
+                              <View style={{
+                                flexDirection: 'row',
+                              }}>
+                                <Text style={{
+                                  color: '#EFE3C8',
+                                  fontSize: 17,
+                                }}>
+                                  Màu:{' '}
+                                  <Text style={{ fontWeight: 'bold' }}>
+                                    {item.color}
+                                  </Text>
+                                  {' '}- Size:{' '}
+                                  <Text style={{ fontWeight: 'bold' }}>
+                                    {item.size}
+                                  </Text>
+                                </Text>
+                                <Text style={{
+                                  position: 'absolute',
+                                  color: '#EFE3C8',
+                                  fontSize: 17,
+                                  right: 10
+                                }}>
+                                  x{item.quantity}
+                                </Text>
+                              </View>
+                              <Text style={{
+                                color: '#EFE3C8',
+                                fontSize: 18,
+                                fontWeight: 'bold'
+                              }}>
+                                {(item.price).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} VNĐ
+                              </Text>
+                            </View>
+                          </View>
+                        </TouchableWithoutFeedback>
+                      }
+                    />
+                  </View>
                   <View style={{
                     width: '100%',
-                    height: '90%',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
+                    padding: 5,
+                    paddingHorizontal: 20,
+                    backgroundColor: '#38232A',
+                    borderTopLeftRadius: 20,
+                    borderTopRightRadius: 20,
+                    position: 'absolute',
+                    bottom: 10,
                   }}>
-                    <TouchableOpacity style={{
-                      backgroundColor: '#C94C4C',
-                      width: 65,
-                      height: '100%',
-                      borderRadius: 10,
-                      justifyContent: 'center'
-                    }}
-                      onPress={() => handleDelete({ item })}
-                    >
-                      <Icon name='delete' type='antdesign' size={30} color={'white'} />
-                    </TouchableOpacity>
+
                     <View style={{
-                      width: 160,
-                      height: '100%',
-                      backgroundColor: '#362C36',
-                      borderRadius: 10,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      flexDirection: 'row'
-                    }}>
-                      <TouchableOpacity style={{
-                        width: 35,
-                        height: 35,
-                        backgroundColor: '#EFE3C8',
-                        borderRadius: 10,
-                        justifyContent: 'center'
-                      }}
-                        onPress={() => handleRemove({ item })}
-                      >
-                        <Icon name='minus' type='antdesign' size={30} color={'#362C36'} />
-                      </TouchableOpacity>
-                      <Text style={{
-                        width: 50,
-                        height: 35,
-                        backgroundColor: '#201520',
-                        color: '#EFE3C8',
-                        fontSize: 23,
-                        fontWeight: 'bold',
-                        justifyContent: 'center',
-                        textAlign: 'center'
-                      }}>{item.quantity}</Text>
-                      <TouchableOpacity style={{
-                        width: 35,
-                        height: 35,
-                        backgroundColor: '#EFE3C8',
-                        borderRadius: 10,
-                        justifyContent: 'center'
-                      }}
-                        onPress={() => handleAdd({ item })}
-                      >
-                        <Icon name='plus' type='antdesign' size={30} color={'#362C36'} />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                )}
-                renderItem={({ item }) =>
-                  <TouchableWithoutFeedback onPress={() => navigation.navigate('Details', { item: item.product_id })}>
-                    <View item={item} style={{
-                      backgroundColor: '#362C36',
+                      width: '100%',
+                      justifyContent: 'space-between',
                       flexDirection: 'row',
-                      padding: 10,
-                      borderRadius: 10,
-                      marginBottom: 10
+                      alignItems: 'center',
                     }}>
-                      <View style={{
-                        width: 70,
-                        height: 70,
-                        borderRadius: 10,
-                        overflow: 'hidden',
-                        marginRight: 10
-                      }}>
-                        <Image
-                          source={{ uri: item.product_id.image }}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            resizeMode: 'cover',
-                          }}
-                        />
-                      </View>
-                      <View style={{ width: '75%' }}>
+                      <View>
                         <Text style={{
-                          height: 26,
+                          color: '#EFE3C8',
+                          fontSize: 15
+                        }}>
+                          Tổng thanh toán:
+                        </Text>
+                        <Text style={{
                           color: '#EFE3C8',
                           fontSize: 20,
                           fontWeight: 'bold'
                         }}>
-                          {item.product_id.name}
-                        </Text>
-                        <View style={{
-                          flexDirection: 'row',
-                        }}>
-                          <Text style={{
-                            color: '#EFE3C8',
-                            fontSize: 17,
-                          }}>
-                            Màu:{' '}
-                            <Text style={{ fontWeight: 'bold' }}>
-                              {item.color}
-                            </Text>
-                            {' '}- Size:{' '}
-                            <Text style={{ fontWeight: 'bold' }}>
-                              {item.size}
-                            </Text>
-                          </Text>
-                          <Text style={{
-                            position: 'absolute',
-                            color: '#EFE3C8',
-                            fontSize: 17,
-                            right: 10
-                          }}>
-                            x{item.quantity}
-                          </Text>
-                        </View>
-                        <Text style={{
-                          color: '#EFE3C8',
-                          fontSize: 18,
-                          fontWeight: 'bold'
-                        }}>
-                          {(item.price).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} VNĐ
+                          {totalPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} VNĐ
                         </Text>
                       </View>
+                      <TouchableOpacity style={{
+                        backgroundColor: '#EFE3C8',
+                        borderRadius: 10,
+                        marginTop: 5
+                      }}
+                        onPress={() => navigation.navigate('Payment', {
+                          productList: productList,
+                          price: totalPrice,
+                        })}
+                      >
+                        <Text style={{
+                          color: '#362C36',
+                          fontSize: 20,
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                          paddingHorizontal: 10,
+                          paddingVertical: 15
+                        }}>
+                          Thanh toán ({productList.length})
+                        </Text>
+                      </TouchableOpacity>
                     </View>
-                  </TouchableWithoutFeedback>
-                }
-              />
-            </View>
-            <View style={{
-              width: '100%',
-              padding: 5,
-              paddingHorizontal: 20,
-              backgroundColor: '#38232A',
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
-              position: 'absolute',
-              bottom: 10,
-            }}>
-
-              <View style={{
-                width: '100%',
-                justifyContent: 'space-between',
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
-                <View>
-                  <Text style={{
-                    color: '#EFE3C8',
-                    fontSize: 15
-                  }}>
-                    Tổng thanh toán:
-                  </Text>
-                  <Text style={{
-                    color: '#EFE3C8',
-                    fontSize: 20,
-                    fontWeight: 'bold'
-                  }}>
-                    {totalPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} VNĐ
-                  </Text>
+                  </View>
                 </View>
-                <TouchableOpacity style={{
-                  backgroundColor: '#EFE3C8',
-                  borderRadius: 10,
-                  marginTop: 5
-                }}
-                  onPress={() => navigation.navigate('Payment', {
-                    productList: productList,
-                    price: totalPrice,
-                  })}
-                >
-                  <Text style={{
-                    color: '#362C36',
-                    fontSize: 20,
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    paddingHorizontal: 10,
-                    paddingVertical: 15
-                  }}>
-                    Thanh toán ({productList.length})
-                  </Text>
-                </TouchableOpacity>
-              </View>
+              )}
             </View>
-          </View>
-        )}
+        }
       </View>
     </View>
   )

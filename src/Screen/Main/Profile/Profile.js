@@ -27,8 +27,8 @@ const Profile = ({ navigation }) => {
         padding: 10
       }}>
         <View style={{
-          width: 100,
-          height: 100,
+          width: 70,
+          height: 70,
           borderRadius: 20,
           overflow: 'hidden',
           backgroundColor: 'white',
@@ -78,21 +78,6 @@ const Profile = ({ navigation }) => {
           >
             {user.email}
           </Text>
-          <TouchableOpacity style={{
-            borderRadius: 8,
-            borderWidth: 2,
-            borderColor: '#201520',
-            width: 150,
-            marginTop: 5
-          }}>
-            <Text style={{
-              color: '#201520',
-              textAlign: 'center',
-              fontSize: 16
-            }}>
-              Edit account
-            </Text>
-          </TouchableOpacity>
         </View>
       </View>
       <ScrollView>
@@ -113,7 +98,7 @@ const Profile = ({ navigation }) => {
             <Text style={styles.itemText}>Cài đặt</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.itemBox, { borderBottomWidth: 2 }]}
+            style={styles.itemBox}
             onPress={() => {
               Alert.alert('Đăng xuất', 'Bạn chắc chắn muốn đăng xuất!', [
                 {
@@ -123,7 +108,6 @@ const Profile = ({ navigation }) => {
                 {
                   text: 'OK', onPress: async () => {
                     await AsyncStorage.clear()
-                    // dispatch(logout())
                     navigation.navigate('Login')
                   }
                 },

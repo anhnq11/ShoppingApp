@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, ToastAndroid } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, ToastAndroid, ActivityIndicator } from 'react-native'
 import React from 'react'
 import { Icon } from '@rneui/themed'
 import { useState } from 'react'
@@ -20,6 +20,7 @@ const AccountDetails = ({ navigation }) => {
     const [phonenum, setPhonenum] = useState(user.phonenum)
     const [email, setEmail] = useState(user.email)
     const [error, setError] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
 
     const chooseImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -52,54 +53,40 @@ const AccountDetails = ({ navigation }) => {
             return;
         }
 
+        setIsLoading(true)
+
         const data = {
             _id: user._id,
             fullname: fullname,
-            phonenum: phonenum,
             email: email,
             image: image
         }
 
-        await axios({
-            method: 'get',
-            url: `${URL}users/checkRegis?phonenum=` + phonenum,
+        axios({
+            method: 'post',
+            url: `${URL}users/update`,
+            data: JSON.stringify(data),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
         })
             .then((res) => {
-                if (res.status !== 200) {
-                    console.log(res.status);
-                    setError('* Số điện thoại đã được sử dụng!')
+                if (res.status == 200) {
+                    dispatch(login(res.data))
+                    saveUserData(res.data)
+                    ToastAndroid.show('Cập nhật thông tin thành công!', ToastAndroid.SHORT)
+                    navigation.goBack();
+                    setIsLoading(false)
                     return;
                 }
-                else {
-                    axios({
-                        method: 'post',
-                        url: `${URL}users/update`,
-                        data: JSON.stringify(data),
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                        }
-                    })
-                        .then((res) => {
-                            if (res.status == 200) {
-                                dispatch(login(res.data))
-                                saveUserData(res.data)
-                                ToastAndroid.show('Cập nhật thông tin thành công!', ToastAndroid.SHORT)
-                                navigation.goBack();
-                                return;
-                            }
-                        })
-                        .catch((error) => {
-                            console.error('Error:', error);
-                        });
-                }
             })
-            .catch((err) => {
-                console.log(err);
-            })
+            .catch((error) => {
+                setIsLoading(false)
+                console.error('Error:', error);
+            });
     }
 
-    // Lưu thông tin người dùng khi đăng nhập thành công
     const saveUserData = async (userData) => {
         try {
             await AsyncStorage.setItem('userData', JSON.stringify(userData));
@@ -180,6 +167,7 @@ const AccountDetails = ({ navigation }) => {
                 ) : (<View></View>)
             }
             <TextInput
+                editable={!isLoading}
                 type="text"
                 placeholder='Họ và tên...'
                 value={fullname}
@@ -187,22 +175,29 @@ const AccountDetails = ({ navigation }) => {
                 style={styles.input}
                 onChangeText={(text) => { setFullname(text) }} />
             <TextInput
-                type="text"
+                editable={false}
                 placeholder='Số điện thoại...'
                 value={phonenum}
-                placeholderTextColor={'#EFE3C8'}
-                style={styles.input}
-                onChangeText={(text) => { setPhonenum(text) }} />
+                style={[styles.input, { opacity: 0.6 }]}
+            />
             <TextInput
+                editable={!isLoading}
                 type="text"
                 placeholder='Email...'
                 value={email}
                 placeholderTextColor={'#EFE3C8'}
                 style={styles.input}
                 onChangeText={(text) => { setEmail(text) }} />
-            <TouchableOpacity style={styles.button} onPress={() => { handleUpdate() }}>
-                <Text style={styles.text}>Cập nhật</Text>
-            </TouchableOpacity>
+            {
+                isLoading ?
+                    <View style={[styles.button, { flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }]}>
+                        <ActivityIndicator size={'small'} />
+                        <Text style={[styles.text, { marginLeft: 10 }]}>Loading...</Text>
+                    </View> :
+                    <TouchableOpacity style={styles.button} onPress={() => { handleUpdate() }}>
+                        <Text style={styles.text}>Cập nhật</Text>
+                    </TouchableOpacity>
+            }
         </View>
     )
 }
