@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, Pressable, ToastAndroid } from 'react-native'
 import React from 'react'
-import { Icon } from '@rneui/themed'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import Header from '../../../../Comps/Header'
 
 
 const AddressList = ({ navigation }) => {
@@ -116,23 +116,7 @@ const AddressList = ({ navigation }) => {
             paddingTop: 35,
             alignItems: 'center',
         }}>
-            <View style={{
-                width: '100%',
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginBottom: 10
-            }}>
-                <TouchableOpacity style={{ width: '10%' }} onPress={() => navigation.goBack()}>
-                    <Icon name='arrowleft' type='antdesign' size={30} color={'#EFE3C8'} />
-                </TouchableOpacity>
-                <Text style={{
-                    width: '80%',
-                    color: '#EFE3C8',
-                    fontSize: 30,
-                    fontWeight: 'bold',
-                    textAlign: 'center'
-                }}>Địa chỉ</Text>
-            </View>
+            <Header name='Địa chỉ' navigation={navigation}/>
             <View style={{
                 width: '100%'
             }}>
@@ -267,7 +251,7 @@ const AddressList = ({ navigation }) => {
                     <Text style={{
                         fontWeight: 'bold',
                         textAlign: 'center',
-                        fontSize: 25,
+                        fontSize: 20,
                         color: '#201520'
                     }}>Thêm địa chỉ</Text>
                 </TouchableOpacity>

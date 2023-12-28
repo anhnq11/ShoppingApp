@@ -7,6 +7,7 @@ import { selectUser } from '../../../../Redux/Reducer/Reducer';
 import axios from 'axios';
 import URL from '../../../../UrlApi';
 import Toast from 'react-native-toast-message';
+import Header from '../../../../Comps/Header';
 
 
 const AddAddress = ({ route, navigation }) => {
@@ -21,12 +22,10 @@ const AddAddress = ({ route, navigation }) => {
 
   const handleAddress = () => {
 
-    if(!addressname || !address_details || !address){
+    if (!addressname || !address_details || !address) {
       setError(true)
       return
     }
-
-    console.log(addressname, ' - ', address_details, ' - ', address, ' - ', isDefault);
     axios({
       method: 'post',
       url: `${URL}users/address`,
@@ -65,23 +64,7 @@ const AddAddress = ({ route, navigation }) => {
       paddingTop: 35,
       alignItems: 'center'
     }}>
-      <View style={{
-        width: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10
-      }}>
-        <TouchableOpacity style={{ width: '10%' }} onPress={() => navigation.goBack()}>
-          <Icon name='arrowleft' type='antdesign' size={30} color={'#EFE3C8'} />
-        </TouchableOpacity>
-        <Text style={{
-          width: '80%',
-          color: '#EFE3C8',
-          fontSize: 30,
-          fontWeight: 'bold',
-          textAlign: 'center'
-        }}>Thêm địa chỉ</Text>
-      </View>
+      <Header name='Thêm địa chỉ' navigation={navigation} />
       <View style={{
         width: '100%',
         height: '97%',
@@ -90,42 +73,43 @@ const AddAddress = ({ route, navigation }) => {
           error ? (
             <Text style={{
               color: 'red',
-              fontSize: 18
+              fontSize: 15,
+              fontStyle: 'italic',
             }}>* Vui lòng nhập đầy đủ thông tin!</Text>
-          ):(<View></View>)
+          ) : (<View></View>)
         }
         <TextInput
           type="text"
           placeholder='Tên Địa chỉ...'
           placeholderTextColor={'#EFE3C8'}
           style={styles.input}
-          onChangeText={(text) => { 
+          onChangeText={(text) => {
             setAddressname(text)
             setError(false)
-           }}
+          }}
         />
         <TextInput
           type="text"
           placeholder='Số nhà, Tên đường,...'
           placeholderTextColor={'#EFE3C8'}
           style={styles.input}
-          onChangeText={(text) => { 
+          onChangeText={(text) => {
             setAddress_details(text)
             setError(false)
-           }}
+          }}
         />{
         }
-        <Pressable onPress={() => { 
+        <Pressable onPress={() => {
           navigation.navigate('AddressList')
           setError(false)
-           }}>
+        }}>
           <TextInput
             editable={false}
             type="text"
-            placeholder='Tỉnh/Thành phố, Quận/Huyện, Xã/Phường'
+            placeholder='Địa chỉ giao hàng...'
             value={address}
             placeholderTextColor={'#EFE3C8'}
-            style={[styles.input, { fontSize: 16 }]}
+            style={styles.input}
           />
         </Pressable>
         <View style={{
@@ -135,7 +119,7 @@ const AddAddress = ({ route, navigation }) => {
         }}>
           <Text style={{
             color: '#EFE3C8',
-            fontSize: 17,
+            fontSize: 18,
             marginRight: 5
           }}>
             Đặt làm mặc định
@@ -170,8 +154,8 @@ const styles = StyleSheet.create({
     borderColor: '#EFE3C8',
     color: '#EFE3C8',
     borderWidth: 2,
-    marginTop: 20,
-    fontSize: 20,
+    marginTop: 15,
+    fontSize: 17,
     paddingVertical: 5,
     paddingHorizontal: 20,
   },

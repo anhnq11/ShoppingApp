@@ -18,7 +18,7 @@ const Home = ({ navigation }) => {
   const user = useSelector(selectUser);
   const isFocused = useIsFocused()
 
-  const [isLoading, setisLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [favoursList, setfavoursList] = useState([]);
   const [newProducts, setNewProducts] = useState([])
   const [recentOrder, setRecentOrder] = useState([])
@@ -65,12 +65,13 @@ const Home = ({ navigation }) => {
   }
 
   const getData = () => {
-    setisLoading(true)
+    setIsLoading(true)
     Promise.all([getFavours(), getNewProducts(), getRecentOrder()])
       .then(() => {
-        setisLoading(false)
+        setIsLoading(false)
       })
       .catch((err) => {
+        setIsLoading(false)
         console.log('Something went wrong!' + err);
       });
   }

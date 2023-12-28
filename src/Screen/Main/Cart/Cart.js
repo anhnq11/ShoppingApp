@@ -10,6 +10,7 @@ import { updateCartQuantity } from '../../../Redux/Reducer/Reducer'
 import { SwipeListView } from 'react-native-swipe-list-view'
 import { Icon } from '@rneui/themed'
 import { useIsFocused } from '@react-navigation/native';
+import Header from '../../../Comps/Header'
 
 const Cart = ({ navigation }) => {
 
@@ -120,17 +121,7 @@ const Cart = ({ navigation }) => {
   return (
     <View>
       <View style={styles.container}>
-        <Text
-          style={{
-            color: '#EFE3C8',
-            fontSize: 30,
-            fontWeight: 'bold',
-            textAlign: 'center',
-            marginBottom: 10
-          }}
-        >
-          Giỏ hàng
-        </Text>
+        <Header name='Giỏ hàng'/>
         {
           isLoading ?
             <ActivityIndicator isLoading={isLoading} size={'large'} /> : <View style={{ width: '100%', height: '100%' }}>

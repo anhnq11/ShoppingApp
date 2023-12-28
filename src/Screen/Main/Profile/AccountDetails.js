@@ -10,6 +10,7 @@ import URL from '../../../UrlApi'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { isEmail, isPhoneNumber } from '../../../validate'
+import Header from '../../../Comps/Header'
 
 const AccountDetails = ({ navigation }) => {
 
@@ -104,22 +105,7 @@ const AccountDetails = ({ navigation }) => {
             paddingTop: 35,
             alignItems: 'center'
         }}>
-            <View style={{
-                width: '100%',
-                flexDirection: 'row',
-                alignItems: 'center',
-            }}>
-                <TouchableOpacity style={{ width: '10%' }} onPress={() => navigation.goBack()}>
-                    <Icon name='arrowleft' type='antdesign' size={30} color={'#EFE3C8'} />
-                </TouchableOpacity>
-                <Text style={{
-                    width: '80%',
-                    color: '#EFE3C8',
-                    fontSize: 30,
-                    fontWeight: 'bold',
-                    textAlign: 'center'
-                }}>Trang cá nhân</Text>
-            </View>
+            <Header name='Trang cá nhân' navigation={navigation} />
             <View>
                 <Image
                     source={{ uri: image ? image : "https://th.bing.com/th/id/R.55393befef8a75d3a59d25ee7931d60f?rik=Dmwko1HbUCWZ7w&riu=http%3a%2f%2fgetdrawings.com%2ffree-icon%2fpowerpoint-user-icon-59.png&ehk=zkEtxliUAs%2fFgrsCJuqa4qWXNltwnt8b9%2fyMoGmWSYU%3d&risl=&pid=ImgRaw&r=0" }}

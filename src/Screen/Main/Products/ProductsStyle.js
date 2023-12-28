@@ -21,7 +21,7 @@ export default StyleSheet.create({
     },
     text: {
         color: '#EFE3C8',
-        fontSize: 30,
+        fontSize: 25,
         fontWeight: 'bold',
     },
     // Right layout
