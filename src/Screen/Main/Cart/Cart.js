@@ -133,9 +133,9 @@ const Cart = ({ navigation }) => {
               }}>
                 Không có sản phẩm trong giỏ hàng!
               </Text>) : (
-                <View style={{ width: '100%', height: '95%' }}>
+                <View style={{ width: '100%', height: '96%' }}>
                   <View style={{
-                    height: '85%',
+                    height: '90%',
                   }}>
                     <SwipeListView
                       data={productList}
@@ -318,7 +318,7 @@ const Cart = ({ navigation }) => {
                         borderRadius: 10,
                         marginTop: 5
                       }}
-                        onPress={() => navigation.navigate('Payment', {
+                        onPress={() => navigation.navigate('Checkout', {
                           productList: productList,
                           price: totalPrice,
                         })}

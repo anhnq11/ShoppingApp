@@ -202,7 +202,7 @@ const Address = ({ navigation }) => {
                         borderRadius: 70,
                         borderWidth: 2,
                         borderColor: '#EFE3C8'
-                    }} onPress={() => navigation.navigate('AddAddress', { dataAddress: null })}>
+                    }} onPress={() => navigation.navigate('AddAddress', { data: null })}>
                         <Icon name='plus' type='antdesign' color={'#EFE3C8'} size={25} />
                     </TouchableOpacity>
                 </View>

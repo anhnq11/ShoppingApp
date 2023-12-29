@@ -1,6 +1,5 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Switch, Touchable, TouchableWithoutFeedback, Pressable } from 'react-native'
 import React from 'react'
-import { Icon } from '@rneui/themed'
 import { useState } from 'react'
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../../../Redux/Reducer/Reducer';
@@ -43,7 +42,7 @@ const AddAddress = ({ route, navigation }) => {
           text1: 'Thành công',
           text2: 'Thêm địa chỉ thành công!'
         });
-        navigation.navigate('Address')
+        navigation.goBack()
       }
       else {
         Toast.show({

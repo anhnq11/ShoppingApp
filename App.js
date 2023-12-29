@@ -14,10 +14,12 @@ import AccountDetails from './src/Screen/Main/Profile/AccountDetails';
 import Address from './src/Screen/Main/Profile/Address/Address';
 import AddAddress from './src/Screen/Main/Profile/Address/AddAddress';
 import AddressList from './src/Screen/Main/Profile/Address/AddressList';
-import Payment from './src/Screen/Main/Cart/Payment';
+import Checkout from './src/Screen/Main/Cart/Checkout';
 import OrderTracking from './src/Screen/Main/Profile/OrderTracking';
 import OrderDetails from './src/Screen/Main/Profile/OrderDetails';
 import OrderHistory from './src/Screen/Main/Profile/OrderHistory';
+import SelectAddress from './src/Screen/Main/Cart/SelectAddress';
+import SelectPaymentMethods from './src/Screen/Main/Cart/SelectPaymentMethods';
 
 const Stack = createStackNavigator();
 
@@ -31,7 +33,9 @@ export default function App() {
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="Regis" component={Regis} options={{ headerShown: false }} />
           <Stack.Screen name="MainScr" component={MainScr} options={{ headerShown: false }} />
-          <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }} />
+          <Stack.Screen name="Checkout" component={Checkout} options={{ headerShown: false }} />
+          <Stack.Screen name="SelectAddress" component={SelectAddress} options={{ headerShown: false }} />
+          <Stack.Screen name="SelectPaymentMethods" component={SelectPaymentMethods} options={{ headerShown: false }} />
           <Stack.Screen name="Details" component={ProductDetail} options={{ headerShown: false }} />
           <Stack.Screen name="AccountDetails" component={AccountDetails} options={{ headerShown: false }} />
           <Stack.Screen name="Address" component={Address} options={{ headerShown: false }} />
