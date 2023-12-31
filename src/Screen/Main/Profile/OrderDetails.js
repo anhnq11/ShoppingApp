@@ -1,6 +1,6 @@
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { Icon } from '@rneui/themed';
+import Header from '../../../Comps/Header';
 
 const OrderDetails = ({ route, navigation }) => {
 
@@ -8,27 +8,11 @@ const OrderDetails = ({ route, navigation }) => {
 
     return (
         <View style={styles.container}>
-            <View style={{
-                width: '100%',
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginBottom: 10
-            }}>
-                <TouchableOpacity style={{ width: '10%' }} onPress={() => navigation.goBack()}>
-                    <Icon name='arrowleft' type='antdesign' size={30} color={'#EFE3C8'} />
-                </TouchableOpacity>
-                <Text style={{
-                    width: '90%',
-                    color: '#EFE3C8',
-                    fontSize: 30,
-                    fontWeight: 'bold',
-                    textAlign: 'center'
-                }}>Chi tiết đơn hàng</Text>
-            </View>
+            <Header name='Chi tiết đơn hàng' navigation={navigation}/>
             <FlatList
                 data={data.listCart}
-                keyExtractor={(item) => item._id}
-                key={(item) => item._id}
+                keyExtractor={(item) => item.index}
+                key={(item) => item.index}
                 showsVerticalScrollIndicator={false}
                 ListHeaderComponent={
                     <View>
@@ -51,7 +35,12 @@ const OrderDetails = ({ route, navigation }) => {
                             color: '#EFE3C8',
                             fontSize: 20,
                             fontWeight: 'bold',
-                            marginVertical: 5
+                            marginVertical: 5,
+                            borderTopWidth: 1,
+                            borderColor: '#EFE3C8',
+                            borderStyle: 'dotted',
+                            paddingTop: 5, 
+                            textAlign: 'center'
                         }}>
                             Chi tiết đơn hàng
                         </Text>
@@ -62,7 +51,12 @@ const OrderDetails = ({ route, navigation }) => {
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        paddingHorizontal: 20
+                        paddingHorizontal: 20,
+                        paddingVertical: 5, 
+                        marginVertical: 5,
+                        borderTopWidth: 1, 
+                        borderColor: '#EFE3C8',
+                        borderStyle: 'dotted'
                     }}>
                         <Text style={{
                             color: '#EFE3C8',

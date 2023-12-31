@@ -71,8 +71,4 @@ yarn-error.*
 # local env files
 .env*.local
 
-# typescript
-*.tsbuildinfo
-
-# @end expo-cli
 UrlApi
